@@ -18,9 +18,9 @@
 ## Phase 2: 핵심 기능 구현
 
 ### 타입 정의
-- [ ] LinkData 인터페이스 정의 (src/types/index.ts)
-- [ ] Settings 인터페이스 정의
-- [ ] 메시지 타입 정의
+- [x] LinkData 인터페이스 정의 (src/types/index.ts)
+- [x] Settings 인터페이스 정의
+- [x] 메시지 타입 정의
 
 ### 유틸리티 함수
 - [ ] URL 유틸리티 함수 구현 (src/utils/url-utils.ts)
