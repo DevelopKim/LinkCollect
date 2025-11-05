@@ -3,11 +3,11 @@
 ## Phase 1: 프로젝트 초기 설정
 
 ### 환경 설정
-- [ ] 프로젝트 초기화 (package.json 생성)
-- [ ] TypeScript 설정 (tsconfig.json)
-- [ ] 빌드 도구 설정 (Vite + CRXJS)
-- [ ] 개발 의존성 설치 (TypeScript, 빌드 도구 등)
-- [ ] 프로젝트 폴더 구조 생성 (src, icons 등)
+- [x] 프로젝트 초기화 (package.json 생성)
+- [x] TypeScript 설정 (tsconfig.json)
+- [x] 빌드 도구 설정 (Vite + CRXJS)
+- [x] 개발 의존성 설치 (TypeScript, 빌드 도구 등)
+- [x] 프로젝트 폴더 구조 생성 (src, icons 등)
 - [ ] Git 저장소 초기화 (선택사항)
 
 ### 기본 확장 기능 설정
