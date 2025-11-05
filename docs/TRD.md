@@ -4,7 +4,7 @@
 
 ### 1.1 기술 스택
 - **언어**: TypeScript (타입 안정성 확보)
-- **빌드 도구**: Vite 또는 Webpack (번들링 및 개발 환경)
+- **빌드 도구**: Vite + CRXJS (번들링 및 개발 환경)
 - **Manifest**: V3 (크롬 확장 기능 최신 표준)
 - **UI 프레임워크**: Vanilla JS 또는 경량 프레임워크 (React 등 선택 가능)
 - **스타일링**: CSS 또는 CSS-in-JS
@@ -23,7 +23,7 @@ collect-links-app/
 ├── manifest.json              # 확장 기능 설정
 ├── package.json
 ├── tsconfig.json
-├── vite.config.ts (또는 webpack.config.js)
+├── vite.config.ts             # Vite + CRXJS 설정
 ├── src/
 │   ├── background/
 │   │   └── service-worker.ts  # Background Service Worker
@@ -306,6 +306,8 @@ chrome.runtime.sendMessage({
   }
 }
 ```
+
+**참고**: Vite + CRXJS 플러그인을 사용하므로 `@crxjs/vite-plugin` 설치 및 설정 필요
 
 ### 6.3 빌드 설정
 - 각 모듈(background, content, popup)을 별도 진입점으로 번들링

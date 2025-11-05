@@ -5,7 +5,7 @@
 ### 환경 설정
 - [ ] 프로젝트 초기화 (package.json 생성)
 - [ ] TypeScript 설정 (tsconfig.json)
-- [ ] 빌드 도구 설정 (Vite 또는 Webpack)
+- [ ] 빌드 도구 설정 (Vite + CRXJS)
 - [ ] 개발 의존성 설치 (TypeScript, 빌드 도구 등)
 - [ ] 프로젝트 폴더 구조 생성 (src, icons 등)
 - [ ] Git 저장소 초기화 (선택사항)
