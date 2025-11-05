@@ -23,15 +23,15 @@
 - [x] 메시지 타입 정의
 
 ### 유틸리티 함수
-- [ ] URL 유틸리티 함수 구현 (src/utils/url-utils.ts)
-  - [ ] 상대 경로를 절대 URL로 변환
-  - [ ] 도메인 추출 함수
-- [ ] 링크 추출 유틸리티 구현 (src/utils/link-extractor.ts)
-  - [ ] 페이지의 모든 링크 추출 로직
-  - [ ] 링크 텍스트 추출
-- [ ] 필터링 로직 구현 (src/utils/filter.ts)
-  - [ ] 도메인 기반 필터링
-  - [ ] 대소문자 무시 비교
+- [x] URL 유틸리티 함수 구현 (src/utils/url-utils.ts)
+  - [x] 상대 경로를 절대 URL로 변환
+  - [x] 도메인 추출 함수
+- [x] 링크 추출 유틸리티 구현 (src/utils/link-extractor.ts)
+  - [x] 페이지의 모든 링크 추출 로직
+  - [x] 링크 텍스트 추출
+- [x] 필터링 로직 구현 (src/utils/filter.ts)
+  - [x] 도메인 기반 필터링
+  - [x] 대소문자 무시 비교
 
 ### Content Script
 - [ ] Content Script 기본 구조 (src/content/content-script.ts)
