@@ -52,6 +52,9 @@ yarn-error.log*
 coverage/
 .nyc_output/
 
+# Vite
+.vite/
+
 # Temporary files
 *.tmp
 *.temp

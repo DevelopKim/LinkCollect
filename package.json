@@ -1,9 +1,25 @@
 {
-  "name": "collect-links-app",
+  "name": "linkcollect",
   "version": "1.0.0",
   "description": "웹 페이지에서 특정 도메인의 링크를 추출하여 다운로드하는 크롬 확장 기능",
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevelopKim/LinkCollect.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DevelopKim/LinkCollect/issues"
+  },
+  "homepage": "https://github.com/DevelopKim/LinkCollect/#readme",
+  "keywords": [
+    "chrome-extension",
+    "link-extractor",
+    "link-collector",
+    "web-scraping",
+    "csv-export",
+    "link-filter"
+  ],
   "type": "module",
   "packageManager": "yarn@3.6.4",
   "scripts": {
