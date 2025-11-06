@@ -34,10 +34,10 @@
   - [x] 대소문자 무시 비교
 
 ### Content Script
-- [ ] Content Script 기본 구조 (src/content/content-script.ts)
-- [ ] 링크 추출 메시지 핸들러 구현
-- [ ] 추출된 링크를 Popup에 전송하는 로직
-- [ ] 에러 처리
+- [x] Content Script 기본 구조 (src/content/content-script.ts)
+- [x] 링크 추출 메시지 핸들러 구현
+- [x] 추출된 링크를 Popup에 전송하는 로직
+- [x] 에러 처리
 
 ### 포맷 시스템
 - [ ] 포맷 인터페이스 정의 (src/formats/base-format.ts)
