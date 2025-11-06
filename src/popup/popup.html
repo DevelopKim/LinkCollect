@@ -3,14 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>링크 수집기</title>
+  <title>링크 추출기</title>
   <link rel="stylesheet" href="./popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 <body>
   <div id="app">
-    <h1>링크 수집기</h1>
-    <p>확장 기능 준비 중...</p>
+    <header class="popup-header">
+      <h1>링크 추출기</h1>
+      <p>필터링 조건을 설정하고 추출된 링크를 미리 보세요.</p>
+    </header>
+    
+    <main class="popup-main">
+      <div class="settings-section">
+        <label class="input-label">
+          <span class="label-text">필터링할 도메인 또는 정규식</span>
+          <input 
+            type="text" 
+            id="domainFilter" 
+            class="domain-input" 
+            placeholder="e.g., example.com" 
+            value=""
+          />
+        </label>
+        
+        <div class="toggle-group">
+          <div class="toggle-item">
+            <div class="toggle-label">
+              <span class="material-symbols-outlined toggle-icon">code</span>
+              <span class="toggle-text">정규식 사용</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="useRegex" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="toggle-item">
+            <div class="toggle-label">
+              <span class="material-symbols-outlined toggle-icon">visibility</span>
+              <span class="toggle-text">추출 링크 미리보기</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="showPreview" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="preview-section" id="previewSection">
+        <h3 class="preview-title" id="previewTitle">0개의 링크 미리보기</h3>
+        <div class="links-list" id="linksList">
+          <!-- 링크 목록이 여기에 동적으로 추가됩니다 -->
+          <div class="empty-state">
+            <span class="material-symbols-outlined empty-icon">link_off</span>
+            <p>아직 추출된 링크가 없습니다.<br />추출하기 버튼을 눌러 링크를 추출하세요.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="popup-footer">
+      <button id="extractButton" class="extract-button">
+        <span class="material-symbols-outlined">file_download</span>
+        추출하기
+      </button>
+    </footer>
   </div>
+  
   <script type="module" src="./popup.ts"></script>
 </body>
 </html>
