@@ -40,11 +40,11 @@
 - [x] 에러 처리
 
 ### 포맷 시스템
-- [ ] 포맷 인터페이스 정의 (src/formats/base-format.ts)
-- [ ] CSV 포맷 구현 (src/formats/csv-format.ts)
-  - [ ] CSV 변환 로직
-  - [ ] CSV 다운로드 함수 (BOM 포함)
-- [ ] 포맷 팩토리 구현 (src/formats/index.ts)
+- [x] 포맷 인터페이스 정의 (src/formats/base-format.ts)
+- [x] CSV 포맷 구현 (src/formats/csv-format.ts)
+  - [x] CSV 변환 로직
+  - [x] CSV 다운로드 함수 (BOM 포함)
+- [x] 포맷 팩토리 구현 (src/formats/index.ts)
 
 ### Storage
 - [ ] 설정 저장/로드 함수 구현 (src/storage/settings.ts)
