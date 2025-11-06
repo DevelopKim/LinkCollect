@@ -9,14 +9,21 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build": "vite build",
-    "dev": "vite build --watch --mode development"
+    "dev": "vite build --watch --mode development",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --run --coverage"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.2.1",
     "@types/chrome": "^0.1.27",
     "@types/node": "^24.10.0",
+    "@vitest/coverage-v8": "^4.0.7",
+    "@vitest/ui": "^4.0.7",
     "sharp": "^0.34.4",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "vitest": "^4.0.7"
   }
 }
