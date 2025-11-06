@@ -47,9 +47,9 @@
 - [x] 포맷 팩토리 구현 (src/formats/index.ts)
 
 ### Storage
-- [ ] 설정 저장/로드 함수 구현 (src/storage/settings.ts)
-- [ ] Chrome Storage API 연동
-- [ ] 기본 설정값 정의
+- [x] 설정 저장/로드 함수 구현 (src/storage/settings.ts)
+- [x] Chrome Storage API 연동
+- [x] 기본 설정값 정의
 
 ## Phase 3: UI 구현
 
