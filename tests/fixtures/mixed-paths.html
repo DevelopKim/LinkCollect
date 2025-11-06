@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>상대/절대 경로 혼합 페이지</title>
+</head>
+<body>
+  <h1>상대/절대 경로 혼합 테스트</h1>
+  
+  <!-- 절대 URL -->
+  <a href="https://example.com/absolute1">절대 URL 1</a>
+  <a href="https://example.com/absolute2">절대 URL 2</a>
+  
+  <!-- 상대 경로 -->
+  <a href="/relative1">루트 상대 경로 1</a>
+  <a href="/relative2">루트 상대 경로 2</a>
+  <a href="relative3">현재 경로 상대</a>
+  <a href="../parent">부모 경로 상대</a>
+  <a href="./sibling">형제 경로 상대</a>
+  
+  <!-- 프로토콜 상대 -->
+  <a href="//example.com/protocol-relative">프로토콜 상대</a>
+  
+  <!-- 다른 도메인 -->
+  <a href="https://other.com/page1">다른 도메인 1</a>
+  <a href="https://other.com/page2">다른 도메인 2</a>
+  
+  <!-- 쿼리스트링/해시 포함 -->
+  <a href="/page?query=value">쿼리스트링 포함</a>
+  <a href="/page#section">해시 포함</a>
+  <a href="/page?query=value#section">쿼리스트링과 해시</a>
+  
+  <!-- 중복 링크 (같은 URL) -->
+  <a href="/duplicate">중복 링크 1</a>
+  <a href="/duplicate">중복 링크 2</a>
+  
+  <!-- 빈 텍스트 링크 -->
+  <a href="/empty-text"></a>
+  <a href="/whitespace-text">   </a>
+  
+  <!-- 이미지가 있는 링크 -->
+  <a href="/image-link"><img src="image.jpg" alt="이미지 링크"></a>
+  
+  <!-- title 속성만 있는 링크 -->
+  <a href="/title-only" title="제목 속성"></a>
+</body>
+</html>
+

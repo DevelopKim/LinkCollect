@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>도메인 필터링 테스트 페이지</title>
+</head>
+<body>
+  <h1>도메인 필터링 테스트</h1>
+  
+  <!-- 타겟 도메인 (example.com) -->
+  <a href="https://example.com/page1">Example 페이지 1</a>
+  <a href="https://www.example.com/page2">WWW Example 페이지</a>
+  <a href="https://shop.example.com/page3">Shop Example 페이지</a>
+  <a href="https://api.example.com/page4">API Example 페이지</a>
+  
+  <!-- 다른 도메인 -->
+  <a href="https://other.com/page1">Other 페이지 1</a>
+  <a href="https://test.com/page2">Test 페이지 2</a>
+  
+  <!-- 쿼리스트링에 example.com이 포함된 경우 (제외되어야 함) -->
+  <a href="https://search.com?query=example.com">쿼리에 example.com 포함</a>
+  <a href="https://search.com?site=example.com&page=1">쿼리에 example.com 포함 2</a>
+  
+  <!-- 경로에 example.com이 포함된 경우 (제외되어야 함) -->
+  <a href="https://test.com/path/example.com/page">경로에 example.com 포함</a>
+  
+  <!-- 서브도메인 테스트 -->
+  <a href="https://sub.example.com/page">서브도메인</a>
+  <a href="https://deep.sub.example.com/page">깊은 서브도메인</a>
+</body>
+</html>
+
