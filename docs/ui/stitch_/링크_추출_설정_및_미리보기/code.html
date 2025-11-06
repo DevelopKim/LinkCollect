@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Link Extractor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#4285F4",
+              "background-light": "#F8F9FA",
+              "background-dark": "#202124",
+              "text-light-primary": "#202124",
+              "text-dark-primary": "#E8EAED",
+              "text-light-secondary": "#5f6368",
+              "text-dark-secondary": "#9aa0a6",
+              "border-light": "#E8EAED",
+              "border-dark": "#3c4043",
+              "surface-light": "#FFFFFF",
+              "surface-dark": "#2d2e30",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display" style="width: 380px; height: 600px;">
+<div class="flex flex-col h-full">
+<header class="p-4 border-b border-border-light dark:border-border-dark">
+<h1 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary">링크 추출기</h1>
+<p class="text-sm text-text-light-secondary dark:text-text-dark-secondary">필터링 조건을 설정하고 추출된 링크를 미리 보세요.</p>
+</header>
+<main class="flex-1 p-4 overflow-y-auto">
+<div class="space-y-4">
+<label class="flex flex-col w-full">
+<p class="pb-2 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">필터링할 도메인 또는 정규식</p>
+<input class="w-full px-3 py-2 text-sm leading-normal border rounded-lg resize-none form-input bg-surface-light dark:bg-surface-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary placeholder:text-text-light-secondary dark:placeholder:text-text-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="e.g., example.com" value=""/>
+</label>
+<div class="flex justify-between">
+<div class="flex items-center gap-3">
+<span class="flex items-center justify-center text-text-light-secondary dark:text-text-dark-secondary material-symbols-outlined" style="font-size: 20px;">code</span>
+<p class="text-sm text-text-light-primary dark:text-text-dark-primary">정규식 사용</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex justify-between">
+<div class="flex items-center gap-3">
+<span class="flex items-center justify-center text-text-light-secondary dark:text-text-dark-secondary material-symbols-outlined" style="font-size: 20px;">visibility</span>
+<p class="text-sm text-text-light-primary dark:text-text-dark-primary">추출 링크 미리보기</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="pt-6 mt-6 border-t border-border-light dark:border-border-dark">
+<h3 class="px-1 pb-3 text-base font-bold text-text-light-primary dark:text-text-dark-primary">12개의 링크 미리보기</h3>
+<div class="space-y-1">
+<a class="flex items-center justify-between gap-4 p-2 rounded-lg cursor-pointer group hover:bg-primary/10" href="#">
+<div class="flex items-center min-w-0 gap-3">
+<div class="flex items-center justify-center rounded-full shrink-0 size-8 bg-slate-200 dark:bg-slate-700">
+<span class="text-text-light-secondary dark:text-text-dark-secondary material-symbols-outlined" style="font-size: 18px;">link</span>
+</div>
+<p class="flex-1 text-sm truncate text-text-light-primary dark:text-text-dark-primary">https://example.com/very-long-url-that-should-be-truncated</p>
+</div>
+<div class="shrink-0">
+<span class="transition-transform duration-200 ease-in-out text-text-light-secondary dark:text-text-dark-secondary group-hover:text-primary material-symbols-outlined" style="font-size: 20px;">open_in_new</span>
+</div>
+</a>
+<a class="flex items-center justify-between gap-4 p-2 rounded-lg cursor-pointer group hover:bg-primary/10" href="#">
+<div class="flex items-center min-w-0 gap-3">
+<div class="flex items-center justify-center rounded-full shrink-0 size-8 bg-slate-200 dark:bg-slate-700">
+<span class="text-text-light-secondary dark:text-text-dark-secondary material-symbols-outlined" style="font-size: 18px;">link</span>
+</div>
+<p class="flex-1 text-sm truncate text-text-light-primary dark:text-text-dark-primary">https://example.com/another-page</p>
+</div>
+<div class="shrink-0">
+<span class="transition-transform duration-200 ease-in-out text-text-light-secondary dark:text-text-dark-secondary group-hover:text-primary material-symbols-outlined" style="font-size: 20px;">open_in_new</span>
+</div>
+</a>
+<a class="flex items-center justify-between gap-4 p-2 rounded-lg cursor-pointer group hover:bg-primary/10" href="#">
+<div class="flex items-center min-w-0 gap-3">
+<div class="flex items-center justify-center rounded-full shrink-0 size-8 bg-slate-200 dark:bg-slate-700">
+<span class="text-text-light-secondary dark:text-text-dark-secondary material-symbols-outlined" style="font-size: 18px;">link</span>
+</div>
+<p class="flex-1 text-sm truncate text-text-light-primary dark:text-text-dark-primary">https://example.com/product/item-123</p>
+</div>
+<div class="shrink-0">
+<span class="transition-transform duration-200 ease-in-out text-text-light-secondary dark:text-text-dark-secondary group-hover:text-primary material-symbols-outlined" style="font-size: 20px;">open_in_new</span>
+</div>
+</a>
+</div>
+</div>
+</main>
+<footer class="p-4 border-t border-border-light dark:border-border-dark">
+<button class="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-bold text-white rounded-lg bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:focus:ring-offset-background-dark">
+<span class="material-symbols-outlined" style="font-size: 20px;">file_download</span>
+                추출하기
+            </button>
+</footer>
+</div>
+</body></html>
