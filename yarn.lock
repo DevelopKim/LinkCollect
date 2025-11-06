@@ -1141,23 +1141,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"collect-links-app@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "collect-links-app@workspace:."
-  dependencies:
-    "@crxjs/vite-plugin": ^2.2.1
-    "@types/chrome": ^0.1.27
-    "@types/node": ^24.10.0
-    "@vitest/coverage-v8": ^4.0.7
-    "@vitest/ui": ^4.0.7
-    happy-dom: ^20.0.10
-    sharp: ^0.34.4
-    typescript: ^5.9.3
-    vite: ^7.1.12
-    vitest: ^4.0.7
-  languageName: unknown
-  linkType: soft
-
 "color-convert@npm:^2.0.1":
   version: 2.0.1
   resolution: "color-convert@npm:2.0.1"
@@ -1819,6 +1802,23 @@ __metadata:
   checksum: c3028ec5c770bb41290c9bb9ca04bdd0a1b698ddbdf6517c9453d3f90fc9e000c9675959fb46891d317690a93c62de03ff1735d8dbe02be83e51168ce85815d3
   languageName: node
   linkType: hard
+
+"linkcollect@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "linkcollect@workspace:."
+  dependencies:
+    "@crxjs/vite-plugin": ^2.2.1
+    "@types/chrome": ^0.1.27
+    "@types/node": ^24.10.0
+    "@vitest/coverage-v8": ^4.0.7
+    "@vitest/ui": ^4.0.7
+    happy-dom: ^20.0.10
+    sharp: ^0.34.4
+    typescript: ^5.9.3
+    vite: ^7.1.12
+    vitest: ^4.0.7
+  languageName: unknown
+  linkType: soft
 
 "lru-cache@npm:^10.0.1, lru-cache@npm:^10.2.0":
   version: 10.4.3
