@@ -24,7 +24,7 @@ describe('Popup 에러 처리', () => {
   describe('DOM 접근 불가 상황', () => {
     it('chrome:// 페이지에서 에러 메시지를 표시해야 함', async () => {
       // chrome.tabs.query 모킹
-      const mockTabsQuery = vi.fn((queryInfo, callback) => {
+      const mockTabsQuery = vi.fn((_queryInfo, callback) => {
         callback([{ id: 1, url: 'chrome://extensions/' }]);
       });
 

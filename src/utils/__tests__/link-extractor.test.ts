@@ -8,7 +8,6 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { extractLinks, extractLinkText } from '../link-extractor';
 import { filterByDomain } from '../filter';
-import type { LinkData } from '../../types';
 
 /**
  * HTML 파일을 로드하고 DOM에 설정

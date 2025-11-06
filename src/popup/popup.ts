@@ -18,7 +18,6 @@ const previewTitle = document.getElementById('previewTitle') as HTMLElement;
 const linksList = document.getElementById('linksList') as HTMLElement;
 
 // 현재 추출된 링크 상태
-let currentLinks: LinkData[] = [];
 let currentFilteredLinks: LinkData[] = [];
 
 /**
@@ -168,7 +167,6 @@ function handleMessage(
 ): boolean {
   if (message.action === 'linksExtracted') {
     const linksMessage = message as LinksExtractedMessage;
-    currentLinks = linksMessage.links;
     currentFilteredLinks = linksMessage.filteredLinks;
     displayLinks(linksMessage.filteredLinks);
     

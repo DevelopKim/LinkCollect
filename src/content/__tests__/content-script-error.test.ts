@@ -13,9 +13,9 @@ describe('Content Script 에러 처리', () => {
 
   beforeEach(() => {
     window = new Window();
-    document = window.document;
+    document = window.document as any;
     global.window = window as any;
-    global.document = document;
+    global.document = document as any;
   });
 
   afterEach(() => {
@@ -164,11 +164,11 @@ describe('Content Script 에러 처리', () => {
       `;
 
       const links = await extractLinks();
-      // 중복 제거 로직이 있다면
+      // extractLinks 함수는 내부적으로 seenUrls Set을 사용하여 중복을 제거함
+      // 동일한 URL이 여러 번 나타나도 하나만 반환되어야 함
       const uniqueUrls = new Set(links.map((link) => link.url));
-      // 현재 구현에서는 중복이 제거되지 않을 수 있음
-      // 실제 동작에 따라 테스트 수정 필요
-      expect(links.length).toBeGreaterThan(0);
+      expect(uniqueUrls.size).toBe(1);
+      expect(links.length).toBe(1);
     });
   });
 });
