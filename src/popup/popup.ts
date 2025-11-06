@@ -5,19 +5,20 @@
 
 import type { LinkData, ExtractLinksMessage, LinksExtractedMessage, ErrorMessage, Message } from '../types';
 import { loadSettings, saveSettings, addRecentDomain, updateDomainFilter } from '../storage/settings';
-// import { getFormat } from '../formats'; // 향후 다운로드 기능에서 사용 예정
+import { getFormat } from '../formats';
 
 // DOM 요소 참조
 const domainFilterInput = document.getElementById('domainFilter') as HTMLInputElement;
 // const useRegexCheckbox = document.getElementById('useRegex') as HTMLInputElement; // 향후 정규식 필터링 기능에서 사용 예정
 const showPreviewCheckbox = document.getElementById('showPreview') as HTMLInputElement;
 const extractButton = document.getElementById('extractButton') as HTMLButtonElement;
+const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement;
 const previewSection = document.getElementById('previewSection') as HTMLElement;
 const previewTitle = document.getElementById('previewTitle') as HTMLElement;
 const linksList = document.getElementById('linksList') as HTMLElement;
 
 // 현재 추출된 링크 상태
-let currentLinks: LinkData[] = []; // 향후 다운로드 기능에서 사용 예정
+let currentLinks: LinkData[] = [];
 let currentFilteredLinks: LinkData[] = [];
 
 /**
@@ -35,11 +36,74 @@ async function init(): Promise<void> {
 
   // 이벤트 리스너 등록
   extractButton.addEventListener('click', handleExtractClick);
+  downloadButton.addEventListener('click', handleDownloadClick);
   showPreviewCheckbox.addEventListener('change', handlePreviewToggle);
   domainFilterInput.addEventListener('input', handleDomainFilterChange);
 
   // Content Script로부터 메시지 수신
   chrome.runtime.onMessage.addListener(handleMessage);
+}
+
+/**
+ * Content Script를 동적으로 주입
+ *
+ * @param tabId - 주입할 탭 ID
+ */
+async function injectContentScript(tabId: number): Promise<void> {
+  try {
+    // manifest.json에 정의된 content script 파일 경로 가져오기
+    // 빌드된 파일 경로를 사용해야 함
+    const manifest = chrome.runtime.getManifest();
+    const contentScripts = manifest.content_scripts?.[0];
+    
+    if (!contentScripts || !contentScripts.js || contentScripts.js.length === 0) {
+      throw new Error('Content Script 파일을 찾을 수 없습니다.');
+    }
+
+    // 첫 번째 content script 파일 주입
+    const scriptFile = contentScripts.js[0];
+    
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: [scriptFile],
+    });
+    
+    // Content Script가 준비될 때까지 잠시 대기
+    await new Promise(resolve => setTimeout(resolve, 100));
+  } catch (error) {
+    console.error('Content Script 주입 실패:', error);
+    throw new Error('Content Script 주입에 실패했습니다. 페이지를 새로고침한 후 다시 시도해주세요.');
+  }
+}
+
+/**
+ * Content Script에 링크 추출 메시지 전송
+ *
+ * @param tabId - 메시지를 보낼 탭 ID
+ * @param domainFilter - 도메인 필터
+ */
+function sendExtractMessage(tabId: number, domainFilter: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const message: ExtractLinksMessage = {
+      action: 'extractLinks',
+      domain: domainFilter,
+    };
+
+    chrome.tabs.sendMessage(tabId, message, (response: LinksExtractedMessage | ErrorMessage | undefined) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(chrome.runtime.lastError.message));
+        return;
+      }
+
+      if (!response) {
+        reject(new Error('링크 추출 응답을 받지 못했습니다.'));
+        return;
+      }
+
+      handleMessage(response);
+      resolve();
+    });
+  });
 }
 
 /**
@@ -61,28 +125,26 @@ async function handleExtractClick(): Promise<void> {
       throw new Error('활성 탭을 찾을 수 없습니다.');
     }
 
-    // Content Script에 링크 추출 요청 메시지 전송
-    const message: ExtractLinksMessage = {
-      action: 'extractLinks',
-      domain: domainFilter,
-    };
+    // 특수 페이지 체크 (chrome://, chrome-extension:// 등)
+    if (tab.url && (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://') || tab.url.startsWith('edge://'))) {
+      throw new Error('특수 페이지에서는 링크를 추출할 수 없습니다. 일반 웹 페이지에서 사용해주세요.');
+    }
 
-    chrome.tabs.sendMessage(tab.id, message, (response: LinksExtractedMessage | ErrorMessage | undefined) => {
-      if (chrome.runtime.lastError) {
-        console.error('메시지 전송 오류:', chrome.runtime.lastError.message);
-        showError('링크 추출 중 오류가 발생했습니다: ' + chrome.runtime.lastError.message);
-        resetExtractButton();
-        return;
+    // Content Script가 로드되었는지 확인하고 필요시 주입
+    try {
+      // 먼저 메시지 전송 시도 (이미 로드된 경우)
+      await sendExtractMessage(tab.id, domainFilter);
+    } catch (error) {
+      // Content Script가 없으면 동적으로 주입
+      if (chrome.runtime.lastError?.message?.includes('Receiving end does not exist')) {
+        console.log('Content Script가 로드되지 않음. 동적으로 주입 시도...');
+        await injectContentScript(tab.id);
+        // 주입 후 다시 메시지 전송
+        await sendExtractMessage(tab.id, domainFilter);
+      } else {
+        throw error;
       }
-
-      if (!response) {
-        showError('링크 추출 응답을 받지 못했습니다.');
-        resetExtractButton();
-        return;
-      }
-
-      handleMessage(response);
-    });
+    }
 
     // 설정 저장
     await updateDomainFilter(domainFilter);
@@ -109,6 +171,12 @@ function handleMessage(
     currentLinks = linksMessage.links;
     currentFilteredLinks = linksMessage.filteredLinks;
     displayLinks(linksMessage.filteredLinks);
+    
+    // 즉시 다운로드 모드인 경우 자동 다운로드
+    if (!showPreviewCheckbox.checked && currentFilteredLinks.length > 0) {
+      downloadLinks(currentFilteredLinks);
+    }
+    
     resetExtractButton();
     return true;
   } else if (message.action === 'error') {
@@ -133,6 +201,13 @@ function displayLinks(links: LinkData[]): void {
   } else {
     previewSection.style.display = 'none';
     return;
+  }
+
+  // 다운로드 버튼 표시/숨김
+  if (links.length > 0) {
+    downloadButton.style.display = 'flex';
+  } else {
+    downloadButton.style.display = 'none';
   }
 
   // 링크 목록 초기화
@@ -213,6 +288,70 @@ async function handlePreviewToggle(): Promise<void> {
 async function handleDomainFilterChange(): Promise<void> {
   const domainFilter = domainFilterInput.value.trim();
   await updateDomainFilter(domainFilter);
+}
+
+/**
+ * 다운로드 버튼 클릭 핸들러
+ */
+async function handleDownloadClick(): Promise<void> {
+  if (currentFilteredLinks.length === 0) {
+    showError('다운로드할 링크가 없습니다.');
+    return;
+  }
+
+  try {
+    downloadLinks(currentFilteredLinks);
+  } catch (error) {
+    console.error('다운로드 오류:', error);
+    showError(error instanceof Error ? error.message : '다운로드 중 오류가 발생했습니다.');
+  }
+}
+
+/**
+ * 링크를 CSV 파일로 다운로드
+ *
+ * @param links - 다운로드할 링크 배열
+ */
+function downloadLinks(links: LinkData[]): void {
+  if (links.length === 0) {
+    showError('다운로드할 링크가 없습니다.');
+    return;
+  }
+
+  try {
+    const format = getFormat('csv');
+    const filename = generateFilename();
+    format.download(links, filename);
+  } catch (error) {
+    console.error('다운로드 오류:', error);
+    showError(error instanceof Error ? error.message : '다운로드 중 오류가 발생했습니다.');
+  }
+}
+
+/**
+ * 다운로드할 파일명 생성
+ * 현재 날짜와 시간을 포함한 파일명 반환
+ *
+ * @returns 파일명 (확장자 제외)
+ */
+function generateFilename(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  // 도메인 필터가 있으면 파일명에 포함
+  const domainFilter = domainFilterInput.value.trim();
+  if (domainFilter) {
+    // 파일명에 사용할 수 없는 문자 제거
+    const sanitizedDomain = domainFilter.replace(/[^a-zA-Z0-9.-]/g, '_');
+    return `links_${sanitizedDomain}_${year}${month}${day}_${hours}${minutes}${seconds}`;
+  }
+
+  return `links_${year}${month}${day}_${hours}${minutes}${seconds}`;
 }
 
 /**

@@ -21,8 +21,11 @@
  * // => 'https://example.com/page' (이미 절대 URL이면 그대로 반환)
  */
 export function convertToAbsoluteUrl(url: string, baseUrl: string): string {
-  // 빈 문자열이나 잘못된 URL 처리
-  if (!url || !baseUrl) {
+  // 타입 검증: 문자열이 아닌 경우 원본 반환
+  if (!url || typeof url !== 'string') {
+    return typeof url === 'string' ? url : '';
+  }
+  if (!baseUrl || typeof baseUrl !== 'string') {
     return url;
   }
 
@@ -41,7 +44,9 @@ export function convertToAbsoluteUrl(url: string, baseUrl: string): string {
     return absoluteUrl.href;
   } catch (error) {
     // URL 파싱 실패 시 원본 URL 반환
-    console.warn('URL 변환 실패:', { url, baseUrl, error });
+    // 에러 객체를 올바르게 로깅
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.warn('URL 변환 실패:', { url, baseUrl, error: errorMessage });
     return url;
   }
 }
@@ -63,7 +68,8 @@ export function convertToAbsoluteUrl(url: string, baseUrl: string): string {
  * // => 'localhost'
  */
 export function extractDomain(url: string): string {
-  if (!url) {
+  // 타입 검증: 문자열이 아닌 경우 빈 문자열 반환
+  if (!url || typeof url !== 'string') {
     return '';
   }
 
@@ -75,6 +81,10 @@ export function extractDomain(url: string): string {
       // Content Script에서는 window.location.href를 사용할 수 있음
       if (typeof window !== 'undefined' && window.location) {
         absoluteUrl = convertToAbsoluteUrl(url, window.location.href);
+        // convertToAbsoluteUrl이 실패하면 원본 url을 반환할 수 있으므로 재확인
+        if (!absoluteUrl || typeof absoluteUrl !== 'string') {
+          return '';
+        }
       } else {
         return '';
       }
@@ -89,7 +99,10 @@ export function extractDomain(url: string): string {
     return hostname;
   } catch (error) {
     // URL 파싱 실패 시 빈 문자열 반환
-    console.warn('도메인 추출 실패:', { url, error });
+    // 에러 객체를 올바르게 로깅
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const urlString = typeof url === 'string' ? url : String(url);
+    console.warn('도메인 추출 실패:', { url: urlString, error: errorMessage });
     return '';
   }
 }

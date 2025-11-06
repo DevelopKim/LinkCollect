@@ -39,12 +39,17 @@ export async function extractLinks(): Promise<LinkData[]> {
         const href = anchor.getAttribute('href');
         
         // href가 없거나 빈 문자열인 경우 스킵
-        if (!href || href.trim() === '') {
+        if (!href || typeof href !== 'string' || href.trim() === '') {
           continue;
         }
 
         // 절대 URL로 변환
         const absoluteUrl = convertToAbsoluteUrl(href, baseUrl);
+        
+        // 변환된 URL이 유효한 문자열인지 확인
+        if (!absoluteUrl || typeof absoluteUrl !== 'string') {
+          continue;
+        }
         
         // 중복 URL 제거
         if (seenUrls.has(absoluteUrl)) {
@@ -70,7 +75,9 @@ export async function extractLinks(): Promise<LinkData[]> {
         });
       } catch (error) {
         // 개별 링크 처리 중 오류 발생 시 로그만 남기고 계속 진행
-        console.warn('링크 추출 중 오류:', { anchor, error });
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const href = anchor?.getAttribute('href') || 'unknown';
+        console.warn('링크 추출 중 오류:', { href, error: errorMessage });
       }
     }
 

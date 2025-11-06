@@ -7,6 +7,8 @@ import type { LinkData } from '../types';
 
 /**
  * 도메인으로 링크를 필터링
+ * URL의 호스트명(domain)만 비교하여 필터링합니다.
+ * 쿼리스트링이나 경로에 포함된 도메인 문자열은 제외합니다.
  * 
  * @param links - 필터링할 링크 배열
  * @param domain - 필터링할 도메인 문자열 (빈 문자열이면 모든 링크 반환)
@@ -14,7 +16,9 @@ import type { LinkData } from '../types';
  * 
  * @example
  * const filtered = filterByDomain(links, 'wowssa.co.kr');
- * // => 도메인에 'wowssa.co.kr'이 포함된 링크만 반환
+ * // => 호스트명에 'wowssa.co.kr'이 포함된 링크만 반환
+ * // 예: 'www.wowssa.co.kr', 'shop.wowssa.co.kr' 등은 포함
+ * // 예: 'search.naver.com?query=wowssa.co.kr' 같은 쿼리스트링의 도메인은 제외
  * 
  * const all = filterByDomain(links, '');
  * // => 모든 링크 반환 (필터링 없음)
@@ -28,18 +32,19 @@ export function filterByDomain(links: LinkData[], domain: string): LinkData[] {
   const domainLower = domain.trim().toLowerCase();
 
   return links.filter((link) => {
-    // URL에 도메인 문자열이 포함되는지 확인
-    const urlMatch = link.url.toLowerCase().includes(domainLower);
+    // 도메인 필드만 사용하여 비교 (URL 전체가 아닌 호스트명만)
+    // 이미 추출된 link.domain에는 호스트명만 포함되어 있음
+    const linkDomainLower = link.domain.toLowerCase();
     
-    // 도메인 필드에 도메인 문자열이 포함되는지 확인
-    const domainMatch = link.domain.toLowerCase().includes(domainLower);
-
-    return urlMatch || domainMatch;
+    // 도메인 필드에 필터 도메인이 포함되어 있는지 확인
+    // 예: 'wowssa.co.kr'이 'www.wowssa.co.kr'에 포함되는지 확인
+    return linkDomainLower.includes(domainLower);
   });
 }
 
 /**
  * 단일 링크가 도메인 필터와 일치하는지 확인
+ * URL의 호스트명(domain)만 비교합니다.
  * 
  * @param link - 확인할 링크
  * @param domain - 필터링할 도메인 문자열
@@ -51,10 +56,10 @@ export function matchesDomain(link: LinkData, domain: string): boolean {
   }
 
   const domainLower = domain.trim().toLowerCase();
-  const urlLower = link.url.toLowerCase();
   const linkDomainLower = link.domain.toLowerCase();
 
-  return urlLower.includes(domainLower) || linkDomainLower.includes(domainLower);
+  // 도메인 필드만 사용하여 비교 (URL 전체가 아닌 호스트명만)
+  return linkDomainLower.includes(domainLower);
 }
 
 /**
@@ -84,12 +89,11 @@ export function filterByMultipleDomains(links: LinkData[], domains: string[]): L
   }
 
   return links.filter((link) => {
-    const urlLower = link.url.toLowerCase();
-    const domainLower = link.domain.toLowerCase();
+    const linkDomainLower = link.domain.toLowerCase();
 
-    // 하나라도 일치하면 포함
+    // 하나라도 일치하면 포함 (도메인 필드만 사용)
     return validDomains.some((domain) => {
-      return urlLower.includes(domain) || domainLower.includes(domain);
+      return linkDomainLower.includes(domain);
     });
   });
 }
